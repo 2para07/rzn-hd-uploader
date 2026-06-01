@@ -1274,13 +1274,33 @@
                 progressText.textContent = 'Patch complete. Preparing download...';
 
                 const downloadUrl = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = downloadUrl;
-                a.download = `rzn_hd_${currentVideoFile.name.replace(/\.[^/.]+$/, '')}_output.mp4`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(downloadUrl);
+                const filename = `rzn_hd_${currentVideoFile.name.replace(/\.[^/.]+$/, '')}_output.mp4`;
+                const isiOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+                if (isiOS) {
+                    // iOS Safari may ignore the `download` attribute — open blob in new tab so user can save it
+                    const win = window.open(downloadUrl, '_blank');
+                    if (!win) {
+                        // Popup blocked: provide a visible link as fallback
+                        showMessage('Popup blocked — long-press the link below to save the patched video.', 'error');
+                        const link = document.createElement('a');
+                        link.href = downloadUrl;
+                        link.textContent = filename;
+                        link.style.display = 'block';
+                        link.style.wordBreak = 'break-all';
+                        document.body.appendChild(link);
+                    }
+                } else {
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+
+                // Revoke the object URL after a short delay to ensure download starts
+                setTimeout(() => URL.revokeObjectURL(downloadUrl), 10000);
 
                 addToHistory(
                     videoMetadata.filename,
