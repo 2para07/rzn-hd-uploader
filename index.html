@@ -1268,7 +1268,7 @@
                 }
                 return response.blob();
             })
-            .then(blob => {
+            .then(async (blob) => {
                 clearInterval(fakeProgress);
                 progressFill.style.width = '100%';
                 progressText.textContent = 'Patch complete. Preparing download...';
