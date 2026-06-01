@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/process",
+      "destination": "https://your-backend-domain.com/process"
+    }
+  ]
+}

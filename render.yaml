@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: rzn-hd-uploader
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://your-vercel-site.vercel.app"
+      - key: SUPABASE_URL
+        value: ""
+      - key: SUPABASE_KEY
+        value: ""

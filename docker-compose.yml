@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  rzn:
+    build: .
+    image: rzn-hd-uploader:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+      - ./output:/usr/src/app/output
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

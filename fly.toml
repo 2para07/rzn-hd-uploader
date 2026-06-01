@@ -1,0 +1,33 @@
+app = "rzn-hd-uploader"
+
+[build]
+  # Fly will build using the local Dockerfile by default. Leave empty to use Dockerfile.
+
+[env]
+  # Set these via `flyctl secrets set` in production
+  # SUPABASE_URL = ""
+  # SUPABASE_KEY = ""
+  # CORS_ALLOWED_ORIGINS = "https://your-vercel-site.vercel.app"
+
+[[services]]
+  internal_port = 3000
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls"]
+    port = 443
+
+  [services.concurrency]
+    type = "requests"
+    soft_limit = 20
+    hard_limit = 25
+
+  [services.tcp_checks]
+    interval = 10000
+    timeout = 2000
+    grace_period = "5s"
+    restart_limit = 0

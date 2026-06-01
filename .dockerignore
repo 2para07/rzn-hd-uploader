@@ -1,0 +1,8 @@
+node_modules
+uploads
+output
+ffmpeg.exe
+ffmpeg.zip
+*.log
+npm-debug.log
+.DS_Store
