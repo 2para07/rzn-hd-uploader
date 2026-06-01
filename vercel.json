@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/process",
-      "destination": "https://your-backend-domain.com/process"
+      "destination": "https://rzn-hd-uploader-2.onrender.com/process"
     }
   ]
 }
