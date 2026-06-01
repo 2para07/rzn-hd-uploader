@@ -1,4 +1,6 @@
 server.js
+package.json
+package-lock.json
 Dockerfile
 docker-compose.yml
 Makefile
@@ -7,7 +9,6 @@ render.yaml
 scripts/
 .env
 .env.example
-package-lock.json
 node_modules/
 uploads/
 output/
