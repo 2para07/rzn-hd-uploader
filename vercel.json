@@ -1,15 +1,18 @@
 {
   "version": 2,
-  "public": true,
   "outputDirectory": "public",
-  "framework": "static",
+  "functions": {
+    "**": {
+      "excludeFiles": "**"
+    }
+  },
   "rewrites": [
     {
       "source": "/process",
       "destination": "https://rzn-hd-uploader-2.onrender.com/process"
     },
     {
-      "source": "/((?!process).)*",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
