@@ -6,7 +6,12 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { spawn } = require('child_process');
+const WebSocket = require('ws');
 const { createClient } = require('@supabase/supabase-js');
+
+if (typeof globalThis.WebSocket === 'undefined') {
+  globalThis.WebSocket = WebSocket;
+}
 
 const app = express();
 const uploadDir = path.join(__dirname, 'uploads');
