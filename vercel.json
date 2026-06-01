@@ -1,13 +1,15 @@
 {
-  "buildCommand": "echo 'Static site'",
+  "version": 2,
+  "public": true,
   "outputDirectory": "public",
+  "framework": "static",
   "rewrites": [
     {
       "source": "/process",
       "destination": "https://rzn-hd-uploader-2.onrender.com/process"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!process).)*",
       "destination": "/index.html"
     }
   ]
