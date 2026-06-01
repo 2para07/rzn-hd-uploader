@@ -989,6 +989,7 @@
                 </div>
 
                 <div class="result-message" id="resultMessage"></div>
+                <div class="download-link-container" id="downloadLinkContainer"></div>
             </div>
 
         </div>
@@ -1275,25 +1276,31 @@
 
                 const downloadUrl = URL.createObjectURL(blob);
                 const filename = `rzn_hd_${currentVideoFile.name.replace(/\.[^/.]+$/, '')}_output.mp4`;
+                const downloadLinkContainer = document.getElementById('downloadLinkContainer');
+                downloadLinkContainer.innerHTML = '';
+
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.textContent = `Tap here to open or save the patched video: ${filename}`;
+                downloadLink.target = '_blank';
+                downloadLink.rel = 'noopener noreferrer';
+                downloadLink.className = 'download-link';
+                downloadLink.download = filename;
+                downloadLinkContainer.appendChild(downloadLink);
+
                 const isiOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-                // Try Web Share API (Level 2) to save file directly on iOS if supported
                 if (isiOS) {
                     try {
-                        // Ensure proper video MIME so iOS shows Save option
                         const fileForShare = new File([blob], filename, { type: 'video/mp4' });
                         if (navigator.canShare && navigator.canShare({ files: [fileForShare] })) {
                             await navigator.share({ files: [fileForShare], title: filename });
-                            showMessage('Shared to iOS share sheet. Save to Files to keep the patched video.', 'success');
+                            showMessage('Shared to iOS share sheet. If you want to keep the video, tap the download link below or choose Save Video from the share options.', 'success');
                         } else {
-                            // Fallback: open blob URL in a new tab so user can long-press and Save Video
-                            const win = window.open(downloadUrl, '_blank');
-                            if (!win) showMessage('Popup blocked — open the link to save the video.', 'error');
+                            showMessage('iOS share is unavailable. Use the link below to open and save the patched video manually.', 'success');
                         }
                     } catch (err) {
-                        // If share failed or was cancelled, fallback to opening the blob URL in new tab
-                        const win = window.open(downloadUrl, '_blank');
-                        if (!win) showMessage('Unable to open download. Long-press this link to save the video.', 'error');
+                        showMessage('iOS share was cancelled or failed. Use the link below to open and save the patched video manually.', 'error');
                     }
                 } else {
                     const a = document.createElement('a');
@@ -1302,9 +1309,9 @@
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
+                    showMessage('✅ Video patched and downloaded successfully.', 'success');
                 }
 
-                // Revoke the object URL after a short delay to ensure download or share completes
                 setTimeout(() => URL.revokeObjectURL(downloadUrl), 10000);
 
                 addToHistory(
