@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "outputDirectory": "public",
-  "functions": {
-    "**": {
-      "excludeFiles": "**"
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
     }
-  },
+  ],
   "rewrites": [
     {
       "source": "/process",
