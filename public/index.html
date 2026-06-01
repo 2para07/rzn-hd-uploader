@@ -1280,17 +1280,20 @@
                 // Try Web Share API (Level 2) to save file directly on iOS if supported
                 if (isiOS) {
                     try {
-                        const fileForShare = new File([blob], filename, { type: blob.type });
+                        // Ensure proper video MIME so iOS shows Save option
+                        const fileForShare = new File([blob], filename, { type: 'video/mp4' });
                         if (navigator.canShare && navigator.canShare({ files: [fileForShare] })) {
                             await navigator.share({ files: [fileForShare], title: filename });
                             showMessage('Shared to iOS share sheet. Save to Files to keep the patched video.', 'success');
                         } else {
-                            // Fallback: navigate to the blob URL so Safari opens it in new tab (user can save from there)
-                            window.location.href = downloadUrl;
+                            // Fallback: open blob URL in a new tab so user can long-press and Save Video
+                            const win = window.open(downloadUrl, '_blank');
+                            if (!win) showMessage('Popup blocked — open the link to save the video.', 'error');
                         }
                     } catch (err) {
-                        // If share failed or was cancelled, fallback to opening the blob URL
-                        window.location.href = downloadUrl;
+                        // If share failed or was cancelled, fallback to opening the blob URL in new tab
+                        const win = window.open(downloadUrl, '_blank');
+                        if (!win) showMessage('Unable to open download. Long-press this link to save the video.', 'error');
                     }
                 } else {
                     const a = document.createElement('a');
